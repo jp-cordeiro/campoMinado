@@ -7,6 +7,7 @@ import Flag from './Flag/Flag';
 import Mine from './Mine';
 
 const Field = ({mined, opened, nearMines, exploded, flagged}) => {
+  const normalSize = 1;
   const styleField = [styles.field];
   if (opened) {
     styleField.push(styles.opened);
@@ -34,7 +35,7 @@ const Field = ({mined, opened, nearMines, exploded, flagged}) => {
         false
       )}
       {mined && opened ? <Mine /> : false}
-      {flagged && !opened ? <Flag /> : false}
+      {flagged && !opened ? <Flag size={normalSize} /> : false}
     </View>
   );
 };
