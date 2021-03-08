@@ -3,9 +3,10 @@ import {View, StyleSheet, Text} from 'react-native';
 
 import '../params';
 import params from '../params';
+import Flag from './Flag/Flag';
 import Mine from './Mine';
 
-const Field = ({mined, opened, nearMines, exploded}) => {
+const Field = ({mined, opened, nearMines, exploded, flagged}) => {
   const styleField = [styles.field];
   if (opened) {
     styleField.push(styles.opened);
@@ -13,7 +14,7 @@ const Field = ({mined, opened, nearMines, exploded}) => {
   if (exploded) {
     styleField.push(styles.exploded);
   }
-  if (styleField.length === 1) {
+  if (!opened && !exploded) {
     styleField.push(styles.regular);
   }
 
@@ -33,6 +34,7 @@ const Field = ({mined, opened, nearMines, exploded}) => {
         false
       )}
       {mined && opened ? <Mine /> : false}
+      {flagged && !opened ? <Flag /> : false}
     </View>
   );
 };
