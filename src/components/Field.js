@@ -1,12 +1,12 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, TouchableWithoutFeedback} from 'react-native';
 
 import '../params';
 import params from '../params';
 import Flag from './Flag/Flag';
 import Mine from './Mine';
 
-const Field = ({mined, opened, nearMines, exploded, flagged}) => {
+const Field = ({mined, opened, nearMines, exploded, flagged, onOpen}) => {
   const normalSize = 1;
   const styleField = [styles.field];
   if (opened) {
@@ -28,15 +28,17 @@ const Field = ({mined, opened, nearMines, exploded, flagged}) => {
   }
 
   return (
-    <View style={styleField}>
-      {!mined && opened && nearMines > 0 ? (
-        <Text style={[styles.label, {color: color}]}>{nearMines}</Text>
-      ) : (
-        false
-      )}
-      {mined && opened ? <Mine /> : false}
-      {flagged && !opened ? <Flag size={normalSize} /> : false}
-    </View>
+    <TouchableWithoutFeedback onPress={onOpen}>
+      <View style={styleField}>
+        {!mined && opened && nearMines > 0 ? (
+          <Text style={[styles.label, {color: color}]}>{nearMines}</Text>
+        ) : (
+          false
+        )}
+        {mined && opened ? <Mine /> : false}
+        {flagged && !opened ? <Flag size={normalSize} /> : false}
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
