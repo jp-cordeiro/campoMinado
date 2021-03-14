@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {SafeAreaView, Text, StyleSheet, Alert} from 'react-native';
+import Header from './src/components/Header/Header';
 import MineField from './src/components/MineField/MineField';
 import {
   cloneBoard,
@@ -9,6 +10,7 @@ import {
   showMines,
   wonGame,
   invertFlag,
+  flagsUsed,
 } from './src/functions';
 
 import './src/params';
@@ -20,10 +22,16 @@ const App = () => {
   const [lose, setLose] = useState(false);
 
   useEffect(() => {
+    newGame();
+  }, []);
+
+  const newGame = useCallback(() => {
     const cols = params.getColumnsAmount();
     const rows = params.getRowsAmount();
     const createBoard = createMinedBoard(rows, cols, minesAmount());
     setBoard(createBoard);
+    setLose(false);
+    setWon(false);
   }, []);
 
   const minesAmount = () => {
@@ -67,10 +75,10 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.welcome}>Iniciando o Campo Minado!</Text>
-      <Text>
-        Tamanho da grade: {params.getRowsAmount()} x {params.getColumnsAmount()}
-      </Text>
+      <Header
+        flagsLeft={minesAmount() - flagsUsed(board)}
+        onNewGame={newGame}
+      />
       <MineField
         board={board}
         onSelectField={onSelectField}
