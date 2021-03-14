@@ -4,7 +4,7 @@ import Field from '../Field';
 
 import {Container} from './style';
 
-const MineField = ({board, onOpenField}) => {
+const MineField = ({board, onOpenField, onSelectField}) => {
   const rows = board.map((row, rowIndex) => {
     const columns = row.map((field, columnIndex) => {
       return (
@@ -12,6 +12,7 @@ const MineField = ({board, onOpenField}) => {
           {...field}
           key={columnIndex}
           onOpen={() => onOpenField(rowIndex, columnIndex)}
+          onSelect={(e) => onSelectField(rowIndex, columnIndex)}
         />
       );
     });

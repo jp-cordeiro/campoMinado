@@ -8,6 +8,7 @@ import {
   openField,
   showMines,
   wonGame,
+  invertFlag,
 } from './src/functions';
 
 import './src/params';
@@ -19,12 +20,10 @@ const App = () => {
   const [lose, setLose] = useState(false);
 
   useEffect(() => {
-    if (board.length === 0) {
-      const cols = params.getColumnsAmount();
-      const rows = params.getRowsAmount();
-      const createBoard = createMinedBoard(rows, cols, minesAmount());
-      setBoard(createBoard);
-    }
+    const cols = params.getColumnsAmount();
+    const rows = params.getRowsAmount();
+    const createBoard = createMinedBoard(rows, cols, minesAmount());
+    setBoard(createBoard);
   }, []);
 
   const minesAmount = () => {
@@ -53,13 +52,30 @@ const App = () => {
     setWon(won);
   };
 
+  const onSelectField = (row, column) => {
+    const clonedBoard = cloneBoard(board);
+    invertFlag(clonedBoard, row, column);
+    const won = wonGame(clonedBoard);
+
+    if (won) {
+      Alert.alert('Você venceu!!');
+    }
+
+    setBoard(clonedBoard);
+    setLose(lose);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.welcome}>Iniciando o Campo Minado!</Text>
       <Text>
         Tamanho da grade: {params.getRowsAmount()} x {params.getColumnsAmount()}
       </Text>
-      <MineField board={board} onOpenField={onOpenField} />
+      <MineField
+        board={board}
+        onSelectField={onSelectField}
+        onOpenField={onOpenField}
+      />
     </SafeAreaView>
   );
 };
