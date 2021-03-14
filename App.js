@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {SafeAreaView, Text, StyleSheet, Alert} from 'react-native';
 import Header from './src/components/Header/Header';
 import MineField from './src/components/MineField/MineField';
+import LevelSelection from './src/components/screens/LevelSelection/LevelSelection';
 import {
   cloneBoard,
   createMinedBoard,
@@ -20,6 +21,7 @@ const App = () => {
   const [board, setBoard] = useState([]);
   const [won, setWon] = useState(false);
   const [lose, setLose] = useState(false);
+  const [showLevelSelection, setShowLevelSelection] = useState(false);
 
   useEffect(() => {
     newGame();
@@ -32,12 +34,18 @@ const App = () => {
     setBoard(createBoard);
     setLose(false);
     setWon(false);
+    setShowLevelSelection(false);
   }, []);
 
   const minesAmount = () => {
     const cols = params.getColumnsAmount();
     const rows = params.getRowsAmount();
     return Math.ceil(cols * rows * params.difficultLevel);
+  };
+
+  const onLevelSelected = (level) => {
+    params.difficultLevel = level;
+    newGame();
   };
 
   const onOpenField = (row, column) => {
@@ -75,9 +83,15 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <LevelSelection
+        isVisible={showLevelSelection}
+        onLevelSelected={onLevelSelected}
+        onCancel={() => setShowLevelSelection(false)}
+      />
       <Header
         flagsLeft={minesAmount() - flagsUsed(board)}
         onNewGame={newGame}
+        onFlagsPress={() => setShowLevelSelection(true)}
       />
       <MineField
         board={board}
